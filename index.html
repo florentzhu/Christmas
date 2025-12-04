@@ -12,58 +12,79 @@
     <div class="container">
         <h1 class="title">🎄 圣诞快乐 🎄</h1>
         
-        <div class="tree">
-            <!-- 星星 -->
-            <div class="star">⭐</div>
-            
-            <!-- 树顶 -->
-            <div class="tree-layer layer-1">
-                <div class="ornament ornament-red">🔴</div>
-                <div class="ornament ornament-gold">🟡</div>
+        <div class="scene">
+            <div class="tree-container">
+                <!-- 星星 -->
+                <div class="star">
+                    <div class="star-inner">★</div>
+                </div>
+                
+                <!-- 树的主体 - 使用多个三角形层叠 -->
+                <div class="tree-body">
+                    <!-- 第一段（顶部） -->
+                    <div class="tree-section section-1">
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                    </div>
+                    
+                    <!-- 第二段 -->
+                    <div class="tree-section section-2">
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                    </div>
+                    
+                    <!-- 第三段 -->
+                    <div class="tree-section section-3">
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                    </div>
+                    
+                    <!-- 第四段（底部） -->
+                    <div class="tree-section section-4">
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                        <div class="branch-layer"></div>
+                    </div>
+                </div>
+                
+                <!-- 彩灯 -->
+                <div class="lights"></div>
+                
+                <!-- 装饰球 -->
+                <div class="ornaments"></div>
+                
+                <!-- 树干 -->
+                <div class="trunk">
+                    <div class="trunk-texture"></div>
+                </div>
+                
+                <!-- 树底座 -->
+                <div class="tree-base"></div>
             </div>
             
-            <!-- 第二层 -->
-            <div class="tree-layer layer-2">
-                <div class="ornament ornament-blue">🔵</div>
-                <div class="ornament ornament-gold">🟡</div>
-                <div class="ornament ornament-red">🔴</div>
-            </div>
-            
-            <!-- 第三层 -->
-            <div class="tree-layer layer-3">
-                <div class="ornament ornament-red">🔴</div>
-                <div class="ornament ornament-purple">🟣</div>
-                <div class="ornament ornament-gold">🟡</div>
-                <div class="ornament ornament-blue">🔵</div>
-            </div>
-            
-            <!-- 第四层 -->
-            <div class="tree-layer layer-4">
-                <div class="ornament ornament-gold">🟡</div>
-                <div class="ornament ornament-blue">🔵</div>
-                <div class="ornament ornament-red">🔴</div>
-                <div class="ornament ornament-purple">🟣</div>
-                <div class="ornament ornament-gold">🟡</div>
-            </div>
-            
-            <!-- 第五层 -->
-            <div class="tree-layer layer-5">
-                <div class="ornament ornament-blue">🔵</div>
-                <div class="ornament ornament-red">🔴</div>
-                <div class="ornament ornament-gold">🟡</div>
-                <div class="ornament ornament-purple">🟣</div>
-                <div class="ornament ornament-blue">🔵</div>
-                <div class="ornament ornament-red">🔴</div>
-            </div>
-            
-            <!-- 树干 -->
-            <div class="trunk"></div>
-            
-            <!-- 礼物 -->
+            <!-- 礼物堆 -->
             <div class="gifts">
-                <div class="gift gift-1">🎁</div>
-                <div class="gift gift-2">🎁</div>
-                <div class="gift gift-3">🎁</div>
+                <div class="gift gift-1">
+                    <div class="gift-bow"></div>
+                </div>
+                <div class="gift gift-2">
+                    <div class="gift-bow"></div>
+                </div>
+                <div class="gift gift-3">
+                    <div class="gift-bow"></div>
+                </div>
+                <div class="gift gift-4">
+                    <div class="gift-bow"></div>
+                </div>
             </div>
         </div>
         

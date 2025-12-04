@@ -6,13 +6,14 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
+    perspective: 1000px;
 }
 
 /* 雪花容器 */
@@ -71,203 +72,443 @@ body {
     }
 }
 
-/* 圣诞树 */
-.tree {
+/* 场景容器 */
+.scene {
     position: relative;
     display: inline-block;
-    margin: 0 auto;
+    transform-style: preserve-3d;
+}
+
+/* 树的容器 */
+.tree-container {
+    position: relative;
+    display: inline-block;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
 }
 
 /* 星星 */
 .star {
-    font-size: 3em;
-    animation: twinkle 1.5s ease-in-out infinite alternate,
-               rotate 4s linear infinite;
-    display: inline-block;
-    margin-bottom: -10px;
-    filter: drop-shadow(0 0 10px gold);
-}
-
-@keyframes twinkle {
-    from {
-        transform: scale(1);
-        opacity: 1;
-    }
-    to {
-        transform: scale(1.3);
-        opacity: 0.7;
-    }
-}
-
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* 树的各层 */
-.tree-layer {
     position: relative;
-    margin: 0 auto;
-    background: linear-gradient(135deg, #0f5d1f 0%, #1a7c2f 50%, #0f5d1f 100%);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: sway 3s ease-in-out infinite;
-}
-
-.layer-1 {
     width: 80px;
-    height: 60px;
-    margin-top: -5px;
-}
-
-.layer-2 {
-    width: 120px;
-    height: 70px;
-    margin-top: -15px;
-}
-
-.layer-3 {
-    width: 160px;
     height: 80px;
-    margin-top: -15px;
+    margin: 0 auto 10px;
+    z-index: 100;
 }
 
-.layer-4 {
-    width: 200px;
-    height: 90px;
-    margin-top: -15px;
+.star-inner {
+    font-size: 4em;
+    color: #ffd700;
+    animation: starTwinkle 2s ease-in-out infinite alternate,
+               starRotate 8s linear infinite;
+    display: block;
+    filter: drop-shadow(0 0 20px gold) 
+            drop-shadow(0 0 30px gold)
+            drop-shadow(0 0 40px gold);
 }
 
-.layer-5 {
-    width: 240px;
-    height: 100px;
-    margin-top: -15px;
+@keyframes starTwinkle {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0.8; }
 }
+
+@keyframes starRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 树的主体 */
+.tree-body {
+    position: relative;
+    width: 400px;
+    margin: 0 auto;
+}
+
+/* 树的每一段 */
+.tree-section {
+    position: relative;
+    margin: -20px auto 0;
+}
+
+.section-1 { width: 120px; }
+.section-2 { width: 180px; }
+.section-3 { width: 260px; }
+.section-4 { width: 340px; }
+
+/* 树枝层 */
+.branch-layer {
+    position: relative;
+    height: 40px;
+    margin: -15px auto;
+    background: linear-gradient(135deg, 
+        #0a4d1a 0%, 
+        #0f6b24 25%, 
+        #14852e 50%, 
+        #0f6b24 75%, 
+        #0a4d1a 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: sway 4s ease-in-out infinite;
+    transform-origin: center bottom;
+    box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.3),
+                inset 0 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+/* 为每层添加不同的宽度 */
+.section-1 .branch-layer:nth-child(1) { width: 60px; }
+.section-1 .branch-layer:nth-child(2) { width: 90px; }
+.section-1 .branch-layer:nth-child(3) { width: 120px; }
+
+.section-2 .branch-layer:nth-child(1) { width: 100px; }
+.section-2 .branch-layer:nth-child(2) { width: 130px; }
+.section-2 .branch-layer:nth-child(3) { width: 160px; }
+.section-2 .branch-layer:nth-child(4) { width: 180px; }
+
+.section-3 .branch-layer:nth-child(1) { width: 140px; }
+.section-3 .branch-layer:nth-child(2) { width: 180px; }
+.section-3 .branch-layer:nth-child(3) { width: 210px; }
+.section-3 .branch-layer:nth-child(4) { width: 240px; }
+.section-3 .branch-layer:nth-child(5) { width: 260px; }
+
+.section-4 .branch-layer:nth-child(1) { width: 200px; }
+.section-4 .branch-layer:nth-child(2) { width: 240px; }
+.section-4 .branch-layer:nth-child(3) { width: 270px; }
+.section-4 .branch-layer:nth-child(4) { width: 300px; }
+.section-4 .branch-layer:nth-child(5) { width: 320px; }
+.section-4 .branch-layer:nth-child(6) { width: 340px; }
+
+/* 添加不同的摇摆延迟 */
+.branch-layer:nth-child(odd) { animation-delay: 0s; }
+.branch-layer:nth-child(even) { animation-delay: 0.5s; }
 
 @keyframes sway {
-    0%, 100% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(1deg);
-    }
-    75% {
-        transform: rotate(-1deg);
-    }
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(1.5deg); }
+    75% { transform: rotate(-1.5deg); }
 }
 
-/* 装饰球 */
+/* 彩灯容器 */
+.lights {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.light {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    border-radius: 50% 50% 40% 40%;
+    animation: lightBlink 1.5s ease-in-out infinite;
+}
+
+.light::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 5px;
+    background: #333;
+}
+
+/* 不同颜色的灯 */
+.light-red { 
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+    box-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff6b6b;
+}
+.light-blue { 
+    background: radial-gradient(circle at 30% 30%, #4dabf7, #1971c2);
+    box-shadow: 0 0 10px #4dabf7, 0 0 20px #4dabf7;
+}
+.light-yellow { 
+    background: radial-gradient(circle at 30% 30%, #ffe066, #f59f00);
+    box-shadow: 0 0 10px #ffe066, 0 0 20px #ffe066;
+}
+.light-purple { 
+    background: radial-gradient(circle at 30% 30%, #da77f2, #9c36b5);
+    box-shadow: 0 0 10px #da77f2, 0 0 20px #da77f2;
+}
+.light-green { 
+    background: radial-gradient(circle at 30% 30%, #51cf66, #2b8a3e);
+    box-shadow: 0 0 10px #51cf66, 0 0 20px #51cf66;
+}
+
+@keyframes lightBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* 装饰球容器 */
+.ornaments {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
 .ornament {
     position: absolute;
-    font-size: 1.2em;
-    animation: swing 2s ease-in-out infinite;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    animation: ornamentSwing 3s ease-in-out infinite;
+    cursor: pointer;
+    pointer-events: all;
 }
 
-.layer-1 .ornament:nth-child(1) { left: 20%; top: 40%; animation-delay: 0s; }
-.layer-1 .ornament:nth-child(2) { right: 20%; top: 40%; animation-delay: 0.3s; }
+.ornament::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 8px;
+    background: #8b7355;
+    border-radius: 2px;
+}
 
-.layer-2 .ornament:nth-child(1) { left: 15%; top: 50%; animation-delay: 0.1s; }
-.layer-2 .ornament:nth-child(2) { right: 15%; top: 50%; animation-delay: 0.4s; }
-.layer-2 .ornament:nth-child(3) { left: 45%; top: 30%; animation-delay: 0.2s; }
+.ornament::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+}
 
-.layer-3 .ornament:nth-child(1) { left: 10%; top: 40%; animation-delay: 0.2s; }
-.layer-3 .ornament:nth-child(2) { right: 10%; top: 40%; animation-delay: 0.5s; }
-.layer-3 .ornament:nth-child(3) { left: 35%; top: 60%; animation-delay: 0.3s; }
-.layer-3 .ornament:nth-child(4) { right: 35%; top: 60%; animation-delay: 0.1s; }
+.ornament-red {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+    box-shadow: 0 4px 8px rgba(201, 42, 42, 0.4),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
 
-.layer-4 .ornament:nth-child(1) { left: 8%; top: 50%; animation-delay: 0.4s; }
-.layer-4 .ornament:nth-child(2) { right: 8%; top: 50%; animation-delay: 0.2s; }
-.layer-4 .ornament:nth-child(3) { left: 30%; top: 35%; animation-delay: 0s; }
-.layer-4 .ornament:nth-child(4) { right: 30%; top: 35%; animation-delay: 0.6s; }
-.layer-4 .ornament:nth-child(5) { left: 45%; top: 65%; animation-delay: 0.3s; }
+.ornament-blue {
+    background: radial-gradient(circle at 30% 30%, #4dabf7, #1971c2);
+    box-shadow: 0 4px 8px rgba(25, 113, 194, 0.4),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
 
-.layer-5 .ornament:nth-child(1) { left: 5%; top: 45%; animation-delay: 0.5s; }
-.layer-5 .ornament:nth-child(2) { right: 5%; top: 45%; animation-delay: 0.1s; }
-.layer-5 .ornament:nth-child(3) { left: 25%; top: 60%; animation-delay: 0.3s; }
-.layer-5 .ornament:nth-child(4) { right: 25%; top: 60%; animation-delay: 0.4s; }
-.layer-5 .ornament:nth-child(5) { left: 42%; top: 30%; animation-delay: 0.2s; }
-.layer-5 .ornament:nth-child(6) { right: 42%; top: 70%; animation-delay: 0.6s; }
+.ornament-gold {
+    background: radial-gradient(circle at 30% 30%, #ffd43b, #f59f00);
+    box-shadow: 0 4px 8px rgba(245, 159, 0, 0.4),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
 
-@keyframes swing {
-    0%, 100% {
-        transform: translateY(0) scale(1);
-    }
-    50% {
-        transform: translateY(-5px) scale(1.1);
-    }
+.ornament-silver {
+    background: radial-gradient(circle at 30% 30%, #e9ecef, #868e96);
+    box-shadow: 0 4px 8px rgba(134, 142, 150, 0.4),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ornament-purple {
+    background: radial-gradient(circle at 30% 30%, #da77f2, #9c36b5);
+    box-shadow: 0 4px 8px rgba(156, 54, 181, 0.4),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes ornamentSwing {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+.ornament:hover {
+    transform: scale(1.3) !important;
+    transition: transform 0.3s;
 }
 
 /* 树干 */
 .trunk {
-    width: 60px;
-    height: 80px;
-    background: linear-gradient(180deg, #5d4037 0%, #4e342e 100%);
-    margin: 0 auto;
-    border-radius: 0 0 10px 10px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    width: 80px;
+    height: 100px;
+    margin: -5px auto 0;
+    background: linear-gradient(to right, #4a3728, #6b4f3d, #4a3728);
+    border-radius: 0 0 15px 15px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5),
+                0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* 礼物 */
+.trunk-texture {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 10px,
+        rgba(0, 0, 0, 0.1) 10px,
+        rgba(0, 0, 0, 0.1) 12px
+    );
+    border-radius: 0 0 15px 15px;
+}
+
+.trunk::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 15px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    box-shadow: 35px 5px 0 rgba(0, 0, 0, 0.2),
+                15px 40px 0 rgba(0, 0, 0, 0.15),
+                40px 55px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* 树底座 */
+.tree-base {
+    width: 140px;
+    height: 40px;
+    margin: 0 auto;
+    background: linear-gradient(to bottom, #8b4513, #654321);
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.tree-base::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+}
+
+/* 礼物堆 */
 .gifts {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
 }
 
 .gift {
-    font-size: 2.5em;
-    animation: bounce 1s ease-in-out infinite;
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 5px;
     cursor: pointer;
     transition: transform 0.3s;
-}
-
-.gift:hover {
-    transform: scale(1.2) rotate(10deg);
+    animation: giftBounce 2s ease-in-out infinite;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .gift-1 {
+    background: linear-gradient(135deg, #ff6b6b 0%, #c92a2a 100%);
     animation-delay: 0s;
 }
 
 .gift-2 {
-    animation-delay: 0.2s;
+    background: linear-gradient(135deg, #4dabf7 0%, #1971c2 100%);
+    animation-delay: 0.3s;
 }
 
 .gift-3 {
-    animation-delay: 0.4s;
+    background: linear-gradient(135deg, #ffd43b 0%, #f59f00 100%);
+    animation-delay: 0.6s;
 }
 
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
+.gift-4 {
+    background: linear-gradient(135deg, #da77f2 0%, #9c36b5 100%);
+    animation-delay: 0.9s;
+}
+
+/* 礼物的丝带 */
+.gift::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.gift::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 礼物的蝴蝶结 */
+.gift-bow {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 20px;
+    z-index: 1;
+}
+
+.gift-bow::before,
+.gift-bow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+}
+
+.gift-bow::before {
+    left: 0;
+    transform: skew(-10deg);
+}
+
+.gift-bow::after {
+    right: 0;
+    transform: skew(10deg);
+}
+
+@keyframes giftBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.gift:hover {
+    transform: scale(1.15) rotate(5deg);
 }
 
 /* 消息 */
 .message {
     color: #fff;
-    font-size: 1.5em;
-    margin-top: 30px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 1.8em;
+    margin-top: 40px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
     animation: fadeIn 2s ease-in;
+    font-weight: bold;
 }
 
 .sub-message {
     color: #ffd700;
-    font-size: 1.2em;
-    margin-top: 10px;
+    font-size: 1.3em;
+    margin-top: 15px;
     font-style: italic;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
     animation: fadeIn 2.5s ease-in;
 }
 
@@ -288,15 +529,29 @@ body {
         font-size: 2em;
     }
     
-    .tree-layer {
+    .tree-body {
+        transform: scale(0.7);
+    }
+    
+    .gifts {
         transform: scale(0.8);
     }
     
     .message {
-        font-size: 1.2em;
+        font-size: 1.3em;
     }
     
     .sub-message {
         font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .tree-body {
+        transform: scale(0.5);
+    }
+    
+    .gifts {
+        transform: scale(0.7);
     }
 }
