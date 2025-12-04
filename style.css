@@ -523,6 +523,99 @@ body {
     }
 }
 
+/* 音乐播放器 */
+.music-player {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.music-toggle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b6b, #c92a2a);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4),
+                0 0 0 0 rgba(255, 107, 107, 0.7);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.music-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+.music-toggle.playing {
+    background: linear-gradient(135deg, #51cf66, #2b8a3e);
+    box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4),
+                0 0 0 0 rgba(81, 207, 102, 0.7);
+    animation: pulse-ring-playing 1.5s ease-in-out infinite;
+}
+
+.music-icon {
+    font-size: 28px;
+    animation: bounce-note 1s ease-in-out infinite;
+}
+
+.music-toggle.playing .music-icon {
+    animation: rotate-note 2s linear infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4),
+                    0 0 0 0 rgba(255, 107, 107, 0.7);
+    }
+    50% {
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4),
+                    0 0 0 10px rgba(255, 107, 107, 0);
+    }
+    100% {
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4),
+                    0 0 0 0 rgba(255, 107, 107, 0);
+    }
+}
+
+@keyframes pulse-ring-playing {
+    0% {
+        box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4),
+                    0 0 0 0 rgba(81, 207, 102, 0.7);
+    }
+    50% {
+        box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4),
+                    0 0 0 10px rgba(81, 207, 102, 0);
+    }
+    100% {
+        box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4),
+                    0 0 0 0 rgba(81, 207, 102, 0);
+    }
+}
+
+@keyframes bounce-note {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes rotate-note {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .title {
@@ -544,6 +637,15 @@ body {
     .sub-message {
         font-size: 1em;
     }
+    
+    .music-toggle {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .music-icon {
+        font-size: 24px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -553,5 +655,10 @@ body {
     
     .gifts {
         transform: scale(0.7);
+    }
+    
+    .music-player {
+        top: 10px;
+        right: 10px;
     }
 }

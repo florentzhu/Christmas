@@ -479,15 +479,49 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// 音乐控制
+function setupMusicPlayer() {
+    const musicToggle = document.getElementById('musicToggle');
+    const bgMusic = document.getElementById('bgMusic');
+    let isPlaying = false;
+    
+    musicToggle.addEventListener('click', () => {
+        if (isPlaying) {
+            bgMusic.pause();
+            musicToggle.classList.remove('playing');
+            isPlaying = false;
+        } else {
+            bgMusic.play().catch(e => {
+                console.log('音频播放失败:', e);
+                showMessage('⚠️ 音频加载中，请稍后再试...');
+            });
+            musicToggle.classList.add('playing');
+            isPlaying = true;
+        }
+    });
+    
+    // 音频加载完成
+    bgMusic.addEventListener('canplay', () => {
+        console.log('音频已加载');
+    });
+    
+    // 音频加载失败
+    bgMusic.addEventListener('error', () => {
+        console.log('音频加载失败');
+        showMessage('📁 请将音乐文件命名为 bgm.mp3 放入 music 文件夹');
+    });
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
     createSnowflakes();
     createLights();
     createOrnaments();
     setupGiftInteraction();
+    setupMusicPlayer();
     
     // 添加欢迎消息
     setTimeout(() => {
-        showMessage('🎄 点击礼物和装饰球有惊喜哦！🎁');
+        showMessage('🎄 点击礼物和装饰球有惊喜哦！🎵 点击右上角播放音乐！');
     }, 1500);
 });
