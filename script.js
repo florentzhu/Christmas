@@ -485,31 +485,85 @@ function setupMusicPlayer() {
     const bgMusic = document.getElementById('bgMusic');
     let isPlaying = false;
     
+    // 设置音量
+    bgMusic.volume = 0.5;
+    
     musicToggle.addEventListener('click', () => {
         if (isPlaying) {
             bgMusic.pause();
             musicToggle.classList.remove('playing');
             isPlaying = false;
+            console.log('音乐已暂停');
         } else {
-            bgMusic.play().catch(e => {
-                console.log('音频播放失败:', e);
-                showMessage('⚠️ 音频加载中，请稍后再试...');
-            });
-            musicToggle.classList.add('playing');
-            isPlaying = true;
+            // 尝试播放音乐
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    musicToggle.classList.add('playing');
+                    isPlaying = true;
+                    console.log('音乐开始播放');
+                    showMessage('🎵 音乐已开始播放！');
+                }).catch(e => {
+                    console.error('音频播放失败:', e);
+                    showMessage('⚠️ 音频播放失败，请检查文件是否存在');
+                    // 尝试重新加载音频
+                    bgMusic.load();
+                });
+            }
         }
     });
     
     // 音频加载完成
     bgMusic.addEventListener('canplay', () => {
-        console.log('音频已加载');
+        console.log('音频已加载完成，可以播放');
+    });
+    
+    // 音频成功播放
+    bgMusic.addEventListener('play', () => {
+        console.log('音频正在播放');
+        musicToggle.classList.add('playing');
+        isPlaying = true;
+    });
+    
+    // 音频暂停
+    bgMusic.addEventListener('pause', () => {
+        console.log('音频已暂停');
+        musicToggle.classList.remove('playing');
+        isPlaying = false;
     });
     
     // 音频加载失败
-    bgMusic.addEventListener('error', () => {
-        console.log('音频加载失败');
-        showMessage('📁 请将音乐文件命名为 bgm.mp3 放入 music 文件夹');
+    bgMusic.addEventListener('error', (e) => {
+        console.error('音频加载失败:', e);
+        showMessage('❌ 音频文件加载失败，请检查 music/bgm.mp3 是否存在');
     });
+    
+    // 音频数据加载中
+    bgMusic.addEventListener('loadstart', () => {
+        console.log('开始加载音频...');
+    });
+    
+    // 提示用户点击按钮
+    setTimeout(() => {
+        if (!isPlaying) {
+            const hint = document.createElement('div');
+            hint.textContent = '← 点击播放音乐';
+            hint.style.cssText = `
+                position: fixed;
+                top: 90px;
+                right: 20px;
+                color: #ffd700;
+                font-size: 14px;
+                font-weight: bold;
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+                animation: fadeInOut 3s ease-in-out;
+                z-index: 999;
+            `;
+            document.body.appendChild(hint);
+            setTimeout(() => hint.remove(), 3000);
+        }
+    }, 3000);
 }
 
 // 初始化

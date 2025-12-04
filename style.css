@@ -616,6 +616,21 @@ body {
     }
 }
 
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    20%, 80% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .title {
