@@ -49,6 +49,7 @@ body {
     z-index: 2;
     position: relative;
     padding: 20px;
+    will-change: auto;
 }
 
 /* 标题 */
@@ -77,6 +78,8 @@ body {
     position: relative;
     display: inline-block;
     transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 /* 树的容器 */
@@ -181,8 +184,8 @@ body {
 
 @keyframes sway {
     0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(1.5deg); }
-    75% { transform: rotate(-1.5deg); }
+    25% { transform: rotate(0.5deg); }
+    75% { transform: rotate(-0.5deg); }
 }
 
 /* 彩灯容器 */
@@ -318,7 +321,7 @@ body {
 
 @keyframes ornamentSwing {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-8px) rotate(5deg); }
+    50% { transform: translateY(-5px) rotate(3deg); }
 }
 
 .ornament:hover {
@@ -569,32 +572,22 @@ body {
 }
 
 @keyframes pulse-ring {
-    0% {
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4),
-                    0 0 0 0 rgba(255, 107, 107, 0.7);
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
     }
     50% {
         box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4),
-                    0 0 0 10px rgba(255, 107, 107, 0);
-    }
-    100% {
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4),
-                    0 0 0 0 rgba(255, 107, 107, 0);
+                    0 0 0 8px rgba(255, 107, 107, 0);
     }
 }
 
 @keyframes pulse-ring-playing {
-    0% {
-        box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4),
-                    0 0 0 0 rgba(81, 207, 102, 0.7);
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4);
     }
     50% {
         box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4),
-                    0 0 0 10px rgba(81, 207, 102, 0);
-    }
-    100% {
-        box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4),
-                    0 0 0 0 rgba(81, 207, 102, 0);
+                    0 0 0 8px rgba(81, 207, 102, 0);
     }
 }
 
@@ -603,7 +596,7 @@ body {
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-5px);
+        transform: translateY(-3px);
     }
 }
 
