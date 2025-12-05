@@ -484,10 +484,132 @@ function setupMusicPlayer() {
     const musicToggle = document.getElementById('musicToggle');
     const bgMusic = document.getElementById('bgMusic');
     let isPlaying = false;
+    let hasInteracted = false;
     
     // 设置音量
     bgMusic.volume = 0.5;
     
+    // 尝试自动播放音乐
+    function tryAutoPlay() {
+        const playPromise = bgMusic.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                musicToggle.classList.add('playing');
+                isPlaying = true;
+                hasInteracted = true;
+                console.log('✅ 音乐自动播放成功');
+            }).catch(e => {
+                console.log('⚠️ 自动播放被阻止，需要用户交互:', e.message);
+                // 显示提示，引导用户点击页面
+                showAutoPlayHint();
+            });
+        }
+    }
+    
+    // 显示自动播放提示
+    function showAutoPlayHint() {
+        const overlay = document.createElement('div');
+        overlay.className = 'autoplay-overlay';
+        overlay.innerHTML = `
+            <div class="autoplay-hint">
+                <div class="autoplay-icon">🎵</div>
+                <h2>点击任意位置开始播放音乐</h2>
+                <p>浏览器需要用户交互才能播放音频</p>
+                <button class="autoplay-button">开始播放 ▶️</button>
+            </div>
+        `;
+        
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+            cursor: pointer;
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            .autoplay-hint {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 50px 60px;
+                border-radius: 30px;
+                text-align: center;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                animation: zoomIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+            
+            .autoplay-icon {
+                font-size: 80px;
+                margin-bottom: 20px;
+                animation: bounce 1s ease-in-out infinite;
+            }
+            
+            .autoplay-hint h2 {
+                color: white;
+                font-size: 28px;
+                margin: 20px 0;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            }
+            
+            .autoplay-hint p {
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 16px;
+                margin: 15px 0 30px;
+            }
+            
+            .autoplay-button {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                color: white;
+                border: none;
+                padding: 15px 40px;
+                font-size: 20px;
+                font-weight: bold;
+                border-radius: 50px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+                transition: all 0.3s;
+            }
+            
+            .autoplay-button:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+            }
+        `;
+        document.head.appendChild(style);
+        document.body.appendChild(overlay);
+        
+        // 点击任意位置或按钮开始播放
+        const startMusic = () => {
+            bgMusic.play().then(() => {
+                musicToggle.classList.add('playing');
+                isPlaying = true;
+                hasInteracted = true;
+                overlay.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => overlay.remove(), 300);
+                showMessage('🎵 音乐开始播放！');
+            }).catch(e => {
+                console.error('播放失败:', e);
+                showMessage('❌ 音乐播放失败');
+            });
+        };
+        
+        overlay.addEventListener('click', startMusic);
+        overlay.querySelector('.autoplay-button').addEventListener('click', (e) => {
+            e.stopPropagation();
+            startMusic();
+        });
+    }
+    
+    // 音乐按钮点击事件
     musicToggle.addEventListener('click', () => {
         if (isPlaying) {
             bgMusic.pause();
@@ -495,7 +617,6 @@ function setupMusicPlayer() {
             isPlaying = false;
             console.log('音乐已暂停');
         } else {
-            // 尝试播放音乐
             const playPromise = bgMusic.play();
             
             if (playPromise !== undefined) {
@@ -507,63 +628,41 @@ function setupMusicPlayer() {
                 }).catch(e => {
                     console.error('音频播放失败:', e);
                     showMessage('⚠️ 音频播放失败，请检查文件是否存在');
-                    // 尝试重新加载音频
                     bgMusic.load();
                 });
             }
         }
     });
     
-    // 音频加载完成
+    // 音频事件监听
     bgMusic.addEventListener('canplay', () => {
         console.log('音频已加载完成，可以播放');
+        // 音频加载完成后尝试自动播放
+        if (!hasInteracted) {
+            setTimeout(tryAutoPlay, 500);
+        }
     });
     
-    // 音频成功播放
     bgMusic.addEventListener('play', () => {
         console.log('音频正在播放');
         musicToggle.classList.add('playing');
         isPlaying = true;
     });
     
-    // 音频暂停
     bgMusic.addEventListener('pause', () => {
         console.log('音频已暂停');
         musicToggle.classList.remove('playing');
         isPlaying = false;
     });
     
-    // 音频加载失败
     bgMusic.addEventListener('error', (e) => {
         console.error('音频加载失败:', e);
         showMessage('❌ 音频文件加载失败，请检查 music/bgm.mp3 是否存在');
     });
     
-    // 音频数据加载中
     bgMusic.addEventListener('loadstart', () => {
         console.log('开始加载音频...');
     });
-    
-    // 提示用户点击按钮
-    setTimeout(() => {
-        if (!isPlaying) {
-            const hint = document.createElement('div');
-            hint.textContent = '← 点击播放音乐';
-            hint.style.cssText = `
-                position: fixed;
-                top: 90px;
-                right: 20px;
-                color: #ffd700;
-                font-size: 14px;
-                font-weight: bold;
-                text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-                animation: fadeInOut 3s ease-in-out;
-                z-index: 999;
-            `;
-            document.body.appendChild(hint);
-            setTimeout(() => hint.remove(), 3000);
-        }
-    }, 3000);
 }
 
 // 初始化
@@ -576,6 +675,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 添加欢迎消息
     setTimeout(() => {
-        showMessage('🎄 点击礼物和装饰球有惊喜哦！🎵 点击右上角播放音乐！');
+        showMessage('🎄 点击礼物和装饰球有惊喜哦！');
     }, 1500);
 });

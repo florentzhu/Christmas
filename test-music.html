@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>音乐测试</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1e3c72;
+            color: white;
+            font-family: Arial;
+        }
+        .test-box {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            border: none;
+            background: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🎵 音乐播放测试</h1>
+        <p>音乐文件: music/bgm.mp3 (4.3MB)</p>
+        
+        <button onclick="playMusic()">▶️ 播放音乐</button>
+        <button onclick="pauseMusic()">⏸️ 暂停音乐</button>
+        <button onclick="checkStatus()">🔍 检查状态</button>
+        
+        <audio id="testAudio" loop preload="auto">
+            <source src="music/bgm.mp3" type="audio/mpeg">
+        </audio>
+        
+        <div id="status"></div>
+    </div>
+    
+    <script>
+        const audio = document.getElementById('testAudio');
+        const status = document.getElementById('status');
+        
+        function updateStatus(msg) {
+            status.innerHTML += msg + '<br>';
+            console.log(msg);
+        }
+        
+        function playMusic() {
+            audio.play()
+                .then(() => updateStatus('✅ 音乐开始播放'))
+                .catch(e => updateStatus('❌ 播放失败: ' + e.message));
+        }
+        
+        function pauseMusic() {
+            audio.pause();
+            updateStatus('⏸️ 音乐已暂停');
+        }
+        
+        function checkStatus() {
+            updateStatus('--- 状态检查 ---');
+            updateStatus('是否暂停: ' + audio.paused);
+            updateStatus('当前时间: ' + audio.currentTime.toFixed(2) + 's');
+            updateStatus('总时长: ' + audio.duration.toFixed(2) + 's');
+            updateStatus('音量: ' + audio.volume);
+            updateStatus('是否循环: ' + audio.loop);
+            updateStatus('就绪状态: ' + audio.readyState);
+        }
+        
+        audio.addEventListener('loadeddata', () => {
+            updateStatus('✅ 音频数据已加载');
+        });
+        
+        audio.addEventListener('canplay', () => {
+            updateStatus('✅ 音频可以播放了');
+        });
+        
+        audio.addEventListener('error', (e) => {
+            updateStatus('❌ 音频加载错误: ' + e.message);
+        });
+        
+        audio.addEventListener('play', () => {
+            updateStatus('🎵 播放事件触发');
+        });
+        
+        audio.addEventListener('pause', () => {
+            updateStatus('⏸️ 暂停事件触发');
+        });
+        
+        updateStatus('📄 测试页面已加载');
+    </script>
+</body>
+</html>
